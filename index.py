@@ -1,10 +1,14 @@
 import requests
+from dotenv import load_dotenv
+import os
+
+load_dotenv() 
 
 # Masukkan token API Hugging Face Anda di sini
 api_token = "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"
 
 # Prompt untuk menghasilkan gambar
-prompt = "a surreal painting of a cat playing chess"
+prompt = "KUCING MAIN SAMA PINGUIN"
 
 # Header untuk otentikasi
 headers = {
