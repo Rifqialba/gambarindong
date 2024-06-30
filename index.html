@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text to Image Generator</title>
+    <style>
+        /* Tambahkan CSS untuk styling jika diperlukan */
+    </style>
+</head>
+<body>
+    <h1>Text to Image Generator</h1>
+    <form id="imageForm">
+        <label for="text_prompt">Enter your text prompt:</label><br>
+        <textarea id="text_prompt" name="text_prompt" rows="4" cols="50"></textarea><br><br>
+        <button type="submit">Generate Image</button>
+    </form>
+    <div id="imageContainer"></div>
+
+    <script>
+        const form = document.getElementById('imageForm');
+        form.addEventListener('submit', async function(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(form);
+            const textPrompt = formData.get('text_prompt');
+
+            try {
+                const response = await fetch('/generate_image', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ text_prompt: textPrompt })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to generate image');
+                }
+
+                const imageData = await response.json();
+                const imageElement = document.createElement('img');
+                imageElement.src = 'data:image/png;base64,' + imageData.image;
+                document.getElementById('imageContainer').innerHTML = '';
+                document.getElementById('imageContainer').appendChild(imageElement);
+
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to generate image. Please try again.');
+            }
+        });
+    </script>
+</body>
+</html>
